@@ -62,7 +62,6 @@ footer {
 }
 #facebookLogin{
   width: 100%;
-  
   display: flex;
   justify-content: center;
 }
@@ -70,4 +69,9 @@ footer {
     width: 100%;
     text-align: center;
     margin: 0;
+}
+#formContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

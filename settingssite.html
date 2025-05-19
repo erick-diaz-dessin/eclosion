@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paramètres - Choisir un avatar et des centres d’intérêt</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <header>
+    <h1>Configuration du profil</h1>
+  </header>
+
+  <div class="avatarMarco">
+    <div class="avatarCont">
+      <label for="pseudoInput">Pseudonyme:</label>
+      <div class="pseudoInputCont">
+        <input type="text" id="pseudoInput" placeholder="Ton pseudonyme" />
+      </div>
+      <br><br>
+
+      <label>
+        Type de cheveux:
+        <select id="hairType">
+          <option value="long">Longs</option>
+          <option value="short">Courts</option>
+        </select>
+      </label>
+
+      <div class="avatar-preview">
+        <img id="avatarImage" src="" alt="Avatar" width="200" height="200" />
+      </div>
+
+      <label for="eyesRange">Yeux et (1-26): <span id="eyesValue">1</span></label>
+      <div class="pseudoInputCont">
+        <input type="range" id="eyesRange" min="1" max="26" value="1" />
+      </div><br>
+
+      <label for="hairRange">Cheveux (1-19): <span id="hairValue">1</span></label>
+      <div class="pseudoInputCont">
+        <input type="range" id="hairRange" min="1" max="19" value="1" />
+      </div>
+
+      <div class="interests">
+        <h3>Centres d’intérêt :</h3>
+        <div class="pseudoInputCont">
+          <label><input type="checkbox" value="Sports" /> Sports</label>
+          <label><input type="checkbox" value="Lecture" /> Lecture</label>
+          <label><input type="checkbox" value="Musique" /> Musique</label>
+          <label><input type="checkbox" value="Technologie" /> Technologie</label>
+          <label><input type="checkbox" value="Voyages" /> Voyages</label>
+          <label><input type="checkbox" value="Art" /> Art</label>
+          <label><input type="checkbox" value="Cinéma" /> Cinéma</label>
+          <label><input type="checkbox" value="Jeux vidéo" /> Jeux vidéo</label>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button id="saveButton">Enregistrer le profil</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+    <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlW88Ij6xN4HLgrmjMDnB-Ah3_AN3Zl5Q",
+      authDomain: "eclosion-f61c8.firebaseapp.com",
+      projectId: "eclosion-f61c8",
+      storageBucket: "eclosion-f61c8.firebasestorage.app",
+      messagingSenderId: "933129070472",
+      appId: "1:933129070472:web:498ba567b3c0f7ff9fbc3d",
+      measurementId: "G-CXTMXLB421"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const email = getQueryParam("email") || "email@desconocido.com";
+    const pass = getQueryParam("pass") || "sans_mot_de_passe";
+
+    const pseudoInput = document.getElementById("pseudoInput");
+    const eyesRange = document.getElementById("eyesRange");
+    const hairRange = document.getElementById("hairRange");
+    const hairTypeSelect = document.getElementById("hairType");
+    const avatarImage = document.getElementById("avatarImage");
+    const eyesValue = document.getElementById("eyesValue");
+    const hairValue = document.getElementById("hairValue");
+    const saveButton = document.getElementById("saveButton");
+
+    function updateAvatar() {
+      const seedName = encodeURIComponent(pseudoInput.value.trim() || "User");
+      const eyes = `variant${eyesRange.value.padStart(2, "0")}`;
+      const hair = `${hairTypeSelect.value}${hairRange.value.padStart(2, "0")}`;
+      const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seedName}&hair=${hair}&eyes=${eyes}`;
+      avatarImage.src = url;
+    }
+
+    eyesRange.addEventListener("input", () => {
+      eyesValue.textContent = eyesRange.value;
+      updateAvatar();
+    });
+
+    hairRange.addEventListener("input", () => {
+      hairValue.textContent = hairRange.value;
+      updateAvatar();
+    });
+
+    hairTypeSelect.addEventListener("change", updateAvatar);
+    pseudoInput.addEventListener("input", updateAvatar);
+
+    String.prototype.padStart = String.prototype.padStart || function(targetLength, padString) {
+      targetLength = targetLength >> 0;
+      padString = String(padString || " ");
+      if (this.length > targetLength) return String(this);
+      else {
+        targetLength = targetLength - this.length;
+        if (targetLength > padString.length) padString += padString.repeat(targetLength / padString.length);
+        return padString.slice(0, targetLength) + String(this);
+      }
+    };
+
+    saveButton.addEventListener("click", async () => {
+      const pseudo = pseudoInput.value.trim();
+      if (!pseudo) {
+        alert("Veuillez saisir votre pseudonyme.");
+        return;
+      }
+
+      const interests = Array.from(document.querySelectorAll(".interests input[type=checkbox]:checked"))
+        .map(input => input.value);
+
+      const avatarUrl = avatarImage.src;
+
+      try {
+        await db.collection("userssite").doc(email).set({
+          pseudo: pseudo,
+          nombre: "Eric Zaid",
+          email: email,
+          pass: pass,
+          avatar: avatarUrl,
+          interests: interests,
+          updatedAt: new Date()
+        });
+
+        console.log("Profil enregistré avec succès.");
+        window.location.href = `home.html?nombre=Eric%20Zaid&email=${encodeURIComponent(email)}`;
+
+      } catch (error) {
+        console.error("Erreur lors de l'enregistrement du profil:", error);
+        alert("Erreur lors de l'enregistrement du profil.");
+      }
+    });
+
+    updateAvatar();
+  </script>
+</body>
+</html>
+
