@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página de Inicio - Acompañarte</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    // Configuración Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlW88Ij6xN4HLgrmjMDnB-Ah3_AN3Zl5Q",
+      authDomain: "eclosion-f61c8.firebaseapp.com",
+      projectId: "eclosion-f61c8",
+      storageBucket: "eclosion-f61c8.firebasestorage.app",
+      messagingSenderId: "933129070472",
+      appId: "1:933129070472:web:498ba567b3c0f7ff9fbc3d",
+      measurementId: "G-CXTMXLB421"
+    };
+
+    // Inicializar Firebase y Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Obtener parámetros URL
+    function getParam(key) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key);
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      const nombre = getParam("nombre");
+      const email = getParam("email");
+
+      if (!nombre || !email) return;
+
+      const userRef = doc(db, "users", email);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+
+        // Saludo con nombre
+        document.getElementById("welcome").textContent = `Hola, ${nombre}!`;
+
+        // Mostrar avatar si existe
+        const avatarUrl = data.avatar || "";
+        if (avatarUrl) {
+          const avatarImg = document.createElement("img");
+          avatarImg.src = avatarUrl;
+          avatarImg.alt = "Avatar";
+          avatarImg.width = 150;
+          avatarImg.height = 150;
+          avatarImg.style.borderRadius = "50%";
+          avatarImg.style.marginTop = "10px";
+          document.getElementById("avatarContainer").appendChild(avatarImg);
+        }
+
+        // Mostrar centros de interés
+        const interests = data.interests || [];
+        if (interests.length > 0) {
+          const ul = document.createElement("ul");
+          interests.forEach(i => {
+            const li = document.createElement("li");
+            li.textContent = i;
+            ul.appendChild(li);
+          });
+          const interestsDiv = document.getElementById("interestsContainer");
+          interestsDiv.innerHTML = "<h3>Centros de interés:</h3>";
+          interestsDiv.appendChild(ul);
+        }
+
+      } else {
+        // Si no existe, redirigir a settings.html con nombre y email
+        const query = `?nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+        window.location.href = `settings.html${query}`;
+      }
+    });
+  </script>
+
+  <style>
+    #buttonsContainer {
+      margin-top: 20px;
+    }
+    #buttonsContainer button {
+      font-size: 1rem;
+      padding: 10px 20px;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Acompañarte</h1>
+  </header>
+
+  <main>
+    <p id="welcome">Cargando...</p>
+
+    <div id="avatarContainer"></div>
+
+    <div id="interestsContainer"></div>
+
+    <p>Gracias por unirte a esta red social empática.</p>
+
+    <div id="buttonsContainer">
+     <button id="btnVoz">Voz</button>
+<button id="btnTexto">Texto</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+  </footer>
+  
+
+<script>
+  document.getElementById("btnVoz").addEventListener("click", () => {
+    window.location.href = "rooms.html?room=voz";
+  });
+
+  document.getElementById("btnTexto").addEventListener("click", () => {
+    window.location.href = "rooms.html?room=texto";
+  });
+</script>
+
+
+</body>
+</html>
+

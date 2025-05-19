@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configuración - Elegir Avatar e Intereses</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label { display: block; margin-top: 10px; }
+    .avatar-preview { margin-top: 20px; }
+    .interests { margin-top: 20px; }
+    .interests label { display: inline-block; margin-right: 10px; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Configuración de Perfil</h1>
+
+  <label for="pseudoInput">Pseudónimo:</label>
+  <input type="text" id="pseudoInput" placeholder="Tu pseudónimo" />
+
+  <label for="eyesRange">Ojos (1-26): <span id="eyesValue">1</span></label>
+  <input type="range" id="eyesRange" min="1" max="26" value="1" />
+
+  <label for="hairRange">Cabello (1-19): <span id="hairValue">1</span></label>
+  <input type="range" id="hairRange" min="1" max="19" value="1" />
+
+  <label>
+    Tipo de cabello:
+    <select id="hairType">
+      <option value="long">Long</option>
+      <option value="short">Short</option>
+    </select>
+  </label>
+
+  <div class="avatar-preview">
+    <h3>Avatar generado:</h3>
+    <img id="avatarImage" src="" alt="Avatar" width="200" height="200" />
+  </div>
+
+  <div class="interests">
+    <h3>Centros de interés:</h3>
+    <label><input type="checkbox" value="Deportes" /> Deportes</label>
+    <label><input type="checkbox" value="Lectura" /> Lectura</label>
+    <label><input type="checkbox" value="Música" /> Música</label>
+    <label><input type="checkbox" value="Tecnología" /> Tecnología</label>
+    <label><input type="checkbox" value="Viajes" /> Viajes</label>
+    <label><input type="checkbox" value="Arte" /> Arte</label>
+    <label><input type="checkbox" value="Cine" /> Cine</label>
+    <label><input type="checkbox" value="Videojuegos" /> Videojuegos</label>
+  </div>
+
+  <button id="saveButton">Guardar perfil</button>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Configuración Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlW88Ij6xN4HLgrmjMDnB-Ah3_AN3Zl5Q",
+      authDomain: "eclosion-f61c8.firebaseapp.com",
+      projectId: "eclosion-f61c8",
+      storageBucket: "eclosion-f61c8.firebasestorage.app",
+      messagingSenderId: "933129070472",
+      appId: "1:933129070472:web:498ba567b3c0f7ff9fbc3d",
+      measurementId: "G-CXTMXLB421"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Función para obtener parámetros GET
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Obtenemos nombre y email que vienen en la URL (de index.html)
+    const nombreReal = getQueryParam("nombre") || "NombreDesconocido";
+    const email = getQueryParam("email") || "email@desconocido.com";
+
+    // Elementos del DOM
+    const pseudoInput = document.getElementById("pseudoInput");
+    const eyesRange = document.getElementById("eyesRange");
+    const hairRange = document.getElementById("hairRange");
+    const hairTypeSelect = document.getElementById("hairType");
+    const avatarImage = document.getElementById("avatarImage");
+    const eyesValue = document.getElementById("eyesValue");
+    const hairValue = document.getElementById("hairValue");
+    const saveButton = document.getElementById("saveButton");
+
+    // Función para actualizar el avatar
+    function updateAvatar() {
+      // Usa pseudo para el seed (si está vacío, usar "User")
+      const seedName = encodeURIComponent(pseudoInput.value.trim() || "User");
+      const eyes = `variant${eyesRange.value.padStart(2, "0")}`;
+      const hair = `${hairTypeSelect.value}${hairRange.value.padStart(2, "0")}`;
+
+      const url = `https://api.dicebear.com/9.x/adventurer/svg?seed=${seedName}&hair=${hair}&eyes=${eyes}`;
+      avatarImage.src = url;
+    }
+
+    // Actualiza valores visibles y avatar cuando cambian sliders o inputs
+    eyesRange.addEventListener("input", () => {
+      eyesValue.textContent = eyesRange.value;
+      updateAvatar();
+    });
+
+    hairRange.addEventListener("input", () => {
+      hairValue.textContent = hairRange.value;
+      updateAvatar();
+    });
+
+    hairTypeSelect.addEventListener("change", updateAvatar);
+    pseudoInput.addEventListener("input", updateAvatar);
+
+    // PadStart polyfill (por si acaso)
+    String.prototype.padStart = String.prototype.padStart || function(targetLength, padString) {
+      targetLength = targetLength >> 0;
+      padString = String(padString || " ");
+      if (this.length > targetLength) return String(this);
+      else {
+        targetLength = targetLength - this.length;
+        if (targetLength > padString.length) padString += padString.repeat(targetLength / padString.length);
+        return padString.slice(0, targetLength) + String(this);
+      }
+    };
+
+    // Guardar perfil en Firestore
+    saveButton.addEventListener("click", async () => {
+      const pseudo = pseudoInput.value.trim();
+      if (!pseudo) {
+        alert("Por favor, ingresa tu pseudónimo.");
+        return;
+      }
+
+      // Obtener intereses seleccionados
+      const interests = Array.from(document.querySelectorAll(".interests input[type=checkbox]:checked"))
+        .map(input => input.value);
+
+      // URL avatar actual
+      const avatarUrl = avatarImage.src;
+
+      try {
+        // Guardamos el documento con ID = email (puedes cambiar por otro ID único)
+        await db.collection("users").doc(email).set({
+          pseudo: pseudo,
+          nombre: nombreReal,
+          email: email,
+          avatar: avatarUrl,
+          interests: interests,
+          updatedAt: new Date()
+        });
+
+        alert("Perfil guardado correctamente.");
+        // Opcional: redirigir a home o a otra página
+        // window.location.href = "home.html";
+
+      } catch (error) {
+        console.error("Error al guardar perfil:", error);
+        alert("Ocurrió un error al guardar el perfil.");
+      }
+    });
+
+    // Inicializa avatar al cargar la página
+    updateAvatar();
+  </script>
+</body>
+</html>

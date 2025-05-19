@@ -1,0 +1,89 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-signin-client_id" content="1094789566691-cveqvjnlo4d4rdtrtjqk32vet8q63ccv.apps.googleusercontent.com" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <title>Acompañarte - Red Social Empática</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
+</head>
+<body>
+  <header>
+    <img src="images/logo.png" alt="Logo" />
+  </header>
+
+  <div class="cta">
+    <button onclick="handleJoin()">Únete gratis</button>
+    <button onclick="handleExplore()">Explora cómo funciona</button>
+  </div>
+
+  <div id="fb-root"></div>
+
+  <fb:login-button 
+    scope="public_profile,email" 
+    onlogin="checkLoginState();" 
+    size="large"
+    layout="rounded"
+    width="500">
+  </fb:login-button>
+
+  <div id="status"></div>
+
+  <script>
+    // Inicializar Facebook SDK
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '1217250413239294', // Tu App ID
+        cookie: true,
+        xfbml: true,
+        version: 'v19.0'
+      });
+
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    // Cargar SDK de forma asíncrona
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'facebook-jssdk');
+
+    // Estado del login
+    function statusChangeCallback(response) {
+      if (response.status === 'connected') {
+        FB.api('/me', { fields: 'name,email' }, function (user) {
+          // Redirigir a home.html con nombre y correo
+          const nombre = encodeURIComponent(user.name);
+          const email = encodeURIComponent(user.email);
+          window.location.href = `home.html?nombre=${nombre}&email=${email}`;
+        });
+      } else {
+        document.getElementById('status').innerHTML = 'Login with Facebook.';
+      }
+    }
+
+    function checkLoginState() {
+      FB.getLoginStatus(function (response) {
+        statusChangeCallback(response);
+      });
+    }
+  </script>
+
+  <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+    <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

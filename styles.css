@@ -1,0 +1,62 @@
+html, body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f5f0;
+  color: #333;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+body {
+  flex: 1;
+}
+header {
+  background-color: #ffe6e6;
+  padding: 1.5rem;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #cc3366;
+}
+.cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+.cta button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #cc3366;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0.5rem;
+}
+section {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.features, .testimonials, .forums {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.features ul, .forums ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+footer {
+  background-color: #ffe6e6;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: auto;
+  padding: 10px;
+}
