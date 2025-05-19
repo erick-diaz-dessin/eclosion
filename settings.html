@@ -3,54 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Configuración - Elegir Avatar e Intereses</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    label { display: block; margin-top: 10px; }
-    .avatar-preview { margin-top: 20px; }
-    .interests { margin-top: 20px; }
-    .interests label { display: inline-block; margin-right: 10px; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; }
-  </style>
+  <title>Paramètres - Choisir un avatar et des centres d’intérêt</title>
+  
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="settings.css" />
 </head>
 <body>
-  <h1>Configuración de Perfil</h1>
+  <header>
+    <h1>Configuration du profil</h1>
+  </header>
+  
+  <div class="avatarMarco"><div class="avatarCont"><label for="pseudoInput">Pseudonyme:</label>
+    <div class="pseudoInputCont"><input type="text" id="pseudoInput" placeholder="Ton pseudonyme" /></div>
+   <br><br>
 
-  <label for="pseudoInput">Pseudónimo:</label>
-  <input type="text" id="pseudoInput" placeholder="Tu pseudónimo" />
-
-  <label for="eyesRange">Ojos (1-26): <span id="eyesValue">1</span></label>
-  <input type="range" id="eyesRange" min="1" max="26" value="1" />
-
-  <label for="hairRange">Cabello (1-19): <span id="hairValue">1</span></label>
-  <input type="range" id="hairRange" min="1" max="19" value="1" />
+  
 
   <label>
-    Tipo de cabello:
+    Type de cheveux:
     <select id="hairType">
-      <option value="long">Long</option>
-      <option value="short">Short</option>
+      <option value="long">Longs</option>
+      <option value="short">Courts</option>
     </select>
   </label>
 
   <div class="avatar-preview">
-    <h3>Avatar generado:</h3>
     <img id="avatarImage" src="" alt="Avatar" width="200" height="200" />
   </div>
+  <label for="eyesRange">Yeux et  (1-26): <span id="eyesValue">1</span></label>
+  <div class="pseudoInputCont"><input type="range" id="eyesRange" min="1" max="26" value="1" /></div><br>
+
+  <label for="hairRange">Cheveux (1-19): <span id="hairValue">1</span></label>
+  <div class="pseudoInputCont"><input type="range" id="hairRange" min="1" max="19" value="1" /></div>
 
   <div class="interests">
-    <h3>Centros de interés:</h3>
-    <label><input type="checkbox" value="Deportes" /> Deportes</label>
-    <label><input type="checkbox" value="Lectura" /> Lectura</label>
-    <label><input type="checkbox" value="Música" /> Música</label>
-    <label><input type="checkbox" value="Tecnología" /> Tecnología</label>
-    <label><input type="checkbox" value="Viajes" /> Viajes</label>
-    <label><input type="checkbox" value="Arte" /> Arte</label>
-    <label><input type="checkbox" value="Cine" /> Cine</label>
-    <label><input type="checkbox" value="Videojuegos" /> Videojuegos</label>
+    <h3>Centres d’intérêt :</h3>
+    <div class="pseudoInputCont">
+      <label><input type="checkbox" value="Sports" /> Sports</label>
+      <label><input type="checkbox" value="Lecture" /> Lecture</label>
+      <label><input type="checkbox" value="Musique" /> Musique</label>
+      <label><input type="checkbox" value="Technologie" /> Technologie</label>
+      <label><input type="checkbox" value="Voyages" /> Voyages</label>
+      <label><input type="checkbox" value="Art" /> Art</label>
+      <label><input type="checkbox" value="Cinéma" /> Cinéma</label>
+      <label><input type="checkbox" value="Jeux vidéo" /> Jeux vidéo</label>
+    </div>
   </div>
 
-  <button id="saveButton">Guardar perfil</button>
+  <div class="cta">
+    <button id="saveButton">Enregistrer le profil</button>
+  </div>
+  </div></div>
+
+  
+    <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+    <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
+  </footer>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -132,7 +141,7 @@
     saveButton.addEventListener("click", async () => {
       const pseudo = pseudoInput.value.trim();
       if (!pseudo) {
-        alert("Por favor, ingresa tu pseudónimo.");
+        alert("Veuillez saisir votre pseudonyme.");
         return;
       }
 
@@ -154,13 +163,14 @@
           updatedAt: new Date()
         });
 
-        alert("Perfil guardado correctamente.");
+        console.log("Perfil guardado correctamente.");
         // Opcional: redirigir a home o a otra página
-        // window.location.href = "home.html";
+        window.location.href = `home.html?nombre=${encodeURIComponent(nombreReal)}&email=${encodeURIComponent(email)}`;
+
 
       } catch (error) {
         console.error("Error al guardar perfil:", error);
-        alert("Ocurrió un error al guardar el perfil.");
+        console.log("Ocurrió un error al guardar el perfil.");
       }
     });
 

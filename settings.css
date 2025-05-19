@@ -1,0 +1,65 @@
+.avatarMarco {
+    width: 100;
+    display: flex;
+    justify-content: center;
+}
+.avatarCont {
+    width: 50%;
+    margin-top: 100px;
+    
+}
+.avatarCont > label, h3 { 
+    display: block; 
+    width: 100%;
+    text-align: center;
+}
+.avatar-preview { margin-top: 20px; }
+.interests { margin-top: 20px; }
+.interests label { display: inline-block; margin-right: 10px; }
+button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; }
+
+.pseudoInputCont, .avatar-preview{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#eyesRange, #hairRange {
+  -webkit-appearance: none; /* quitar estilo por defecto en Chrome/Safari */
+  width: 30%;
+  height: 12px;
+  background: #f9f5f0; /* color uniforme de la barra */
+  border-radius: 10px;
+  margin: 0;
+  padding: 0;
+  border: solid #ddd;
+}
+
+/* Track en Firefox */
+#eyesRange::-moz-range-track, #hairRange::-moz-range-track {
+  background: #f9f5f0;
+  height: 12px;
+  border-radius: 10px;
+  border: solid #ddd;
+}
+
+/* Thumb (punto azul) */
+#eyesRange::-webkit-slider-thumb, #hairRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #cc3366;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+#eyesRange::-moz-range-thumb, #hairRange::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #cc3366;
+  border-radius: 50%;
+  cursor: pointer;
+}

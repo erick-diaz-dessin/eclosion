@@ -1,0 +1,35 @@
+main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .gif-section {
+      text-align: center;
+    }
+    .salons-list {
+      border-left: 2px solid #ccc;
+      padding-left: 1rem;
+      max-width: 200px;
+      margin-top: 5rem;
+    }
+    .salons-list h2 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      margin-bottom: 3rem;
+    }
+    .salon {
+      margin-bottom: 1.5rem;
+    }
+    .join-button {
+      padding: 0.5rem 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .join-button:hover {
+      background-color: #45a049;
+    }

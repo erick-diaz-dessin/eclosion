@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Página de Inicio - Acompañarte</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>HomePage - Eclosion</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="settings.css" />
+  <link rel="stylesheet" href="home.css" />
 
   <!-- Firebase -->
   <script type="module">
@@ -26,6 +29,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Variables globales para nombre y email
+    window.nombreReal = "";
+    window.email = "";
+
     // Obtener parámetros URL
     function getParam(key) {
       const params = new URLSearchParams(window.location.search);
@@ -33,19 +40,19 @@
     }
 
     window.addEventListener("DOMContentLoaded", async () => {
-      const nombre = getParam("nombre");
-      const email = getParam("email");
+      window.nombreReal = getParam("nombre");
+      window.email = getParam("email");
 
-      if (!nombre || !email) return;
+      if (!window.nombreReal || !window.email) return;
 
-      const userRef = doc(db, "users", email);
+      const userRef = doc(db, "users", window.email);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
         const data = userSnap.data();
 
         // Saludo con nombre
-        document.getElementById("welcome").textContent = `Hola, ${nombre}!`;
+        document.getElementById("welcome").textContent = `Salut, ${window.nombreReal}!`;
 
         // Mostrar avatar si existe
         const avatarUrl = data.avatar || "";
@@ -76,71 +83,74 @@
 
       } else {
         // Si no existe, redirigir a settings.html con nombre y email
-        const query = `?nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+        const query = `?nombre=${encodeURIComponent(window.nombreReal)}&email=${encodeURIComponent(window.email)}`;
         window.location.href = `settings.html${query}`;
       }
     });
   </script>
-
-  <style>
-    #buttonsContainer {
-      margin-top: 20px;
-    }
-    #buttonsContainer button {
-      font-size: 1rem;
-      padding: 10px 20px;
-      margin-right: 15px;
-      cursor: pointer;
-    }
-    #crisp-frame {
-      position: fixed;
-      bottom: 200px;
-      left: 20px;
-      width: 400px;
-      height: 400px;
-      border: solid;
-      z-index: 9999;
-    }
-  </style>
   
 </head>
 <body>
   <header>
-    <h1>Acompañarte</h1>
+    <h1> Comment te sens-tu aujourd'hui ?</h1>
   </header>
-<iframe id="crisp-frame" src="rooms.html"></iframe>
 
-  <main>
-    <p id="welcome">Cargando...</p>
+  <main class="avatarMarco">
+    <div>
+      <p id="welcome">Loading...</p>
 
-    <div id="avatarContainer"></div>
+      <div class="profilContainer">
+        <div id="avatarContainer" style="width: 300px;"></div>
+        <div id="interestsContainer" style="width: 300px;"></div>
+      </div>
 
-    <div id="interestsContainer"></div>
+      <div class="slider-container">
+        <span class="emoji">😞</span>
+        <input type="range" id="moodSlider" min="1" max="10" value="5" />
+        <span class="emoji">😄</span>
+      </div>
 
-    <p>Gracias por unirte a esta red social empática.</p>
+      <div class="text-input-container">
+        <label for="moodComment">Parle-nous un peu à ce sujet :</label><br />
+        <input id="moodComment" type="text" />
+      </div>
 
-    <div id="buttonsContainer">
-     <button id="btnVoz">Voz</button>
-<button id="btnTexto">Texto</button>
+      <div id="buttonsContainer">
+        <!-- Botones con íconos -->
+        <button id="btnVoz"><i class="fas fa-microphone"></i></button>
+        <button id="btnTexto"><i class="fas fa-comment-dots"></i></button>
+      </div>
     </div>
   </main>
 
   <footer>
     <p>© 2025 Eclosion. Tous droits réservés.</p>
   </footer>
-  
 
-<script>
-  document.getElementById("btnVoz").addEventListener("click", () => {
-    window.location.href = "rooms.html?room=voz";
-  });
+  <script>
+    // Usar las variables globales para redirección
+    document.getElementById("btnVoz").addEventListener("click", () => {
+      if (window.nombreReal && window.email) {
+        window.location.href = `rooms-text.html?nombre=${encodeURIComponent(window.nombreReal)}&email=${encodeURIComponent(window.email)}`;
+      }
+    });
 
-  document.getElementById("btnTexto").addEventListener("click", () => {
-    window.location.href = "rooms.html?room=texto";
-  });
-</script>
+    document.getElementById("btnTexto").addEventListener("click", () => {
+      if (window.nombreReal && window.email) {
+        window.location.href = `rooms-text.html?nombre=${encodeURIComponent(window.nombreReal)}&email=${encodeURIComponent(window.email)}`;
+      }
+    });
 
-
+    // Crisp Chat
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "85c412e8-b55f-4cdf-9de5-6831030ddfa9";
+    (function () {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
 </body>
 </html>
-

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Messagerie - Eclosion</title>
+  
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="salon.css" />
+</head>
+<body>
+  <header>
+    <h1>Messagerie</h1>
+  </header>
+  <div id="chatContainer"><iframe id="chatFrame" src="chat.html?nombre=TuNombre&email=tu@email.com" style="width: 90%; height: 95%; border: none;"></iframe></div>
+    <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+    <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
+  </footer>
+
+  <script>
+    function getParam(key) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(key);
+}
+
+const nombre = getParam("nombre");
+const email = getParam("email");
+
+const iframe = document.getElementById("chatFrame");
+iframe.src = `chat.html?nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+
+  </script>
+</body>
+</html>

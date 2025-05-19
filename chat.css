@@ -1,0 +1,85 @@
+body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f082a7;
+      color: #ba6fd8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #f06996;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    #userInfo {
+      font-size: 1rem;
+      color: #b9bbbe;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      overflow: hidden;
+    }
+    #chatMessages {
+      flex: 1;
+      background-color: #e9d2d2;
+      border-radius: 5px;
+      padding: 15px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message strong {
+      color: #7289da;
+      margin-right: 8px;
+    }
+    #inputContainer {
+      display: flex;
+      gap: 10px;
+    }
+    #messageInput {
+      flex: 1;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+      background-color: #facccc;
+      color: #ba6fd8;
+      font-weight: bold;
+    }
+    #sendBtn {
+      background-color: #7289da;
+      border: none;
+      color: white;
+      padding: 0 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+    #sendBtn:hover {
+      background-color: #5b6eae;
+    }
+    /* Scrollbar styling */
+    #chatMessages::-webkit-scrollbar {
+      width: 8px;
+    }
+    #chatMessages::-webkit-scrollbar-thumb {
+      background-color: #202225;
+      border-radius: 4px;
+    }
+    #messageInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #ffb3c6; /* color rosa claro */
+}

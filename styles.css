@@ -60,3 +60,14 @@ footer {
   margin-top: auto;
   padding: 10px;
 }
+#facebookLogin{
+  width: 100%;
+  
+  display: flex;
+  justify-content: center;
+}
+#status{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}

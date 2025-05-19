@@ -7,7 +7,7 @@
   <meta name="google-signin-client_id" content="1094789566691-cveqvjnlo4d4rdtrtjqk32vet8q63ccv.apps.googleusercontent.com" />
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <title>Acompañarte - Red Social Empática</title>
+  <title>Eclosion - Réseau Social Empathique</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
 </head>
@@ -17,21 +17,23 @@
   </header>
 
   <div class="cta">
-    <button onclick="handleJoin()">Únete gratis</button>
-    <button onclick="handleExplore()">Explora cómo funciona</button>
+    <button onclick="handleJoin()" style="margin-top: 8rem; margin-bottom: 4rem;">Connexion avec e-mail</button>
   </div>
 
   <div id="fb-root"></div>
 
-  <fb:login-button 
+  <div id="facebookLogin">
+    <fb:login-button 
     scope="public_profile,email" 
     onlogin="checkLoginState();" 
     size="large"
     layout="rounded"
     width="500">
   </fb:login-button>
+  </div>
+  
 
-  <div id="status"></div>
+  <div id="status" ></div>
 
   <script>
     // Inicializar Facebook SDK
@@ -67,7 +69,7 @@
           window.location.href = `home.html?nombre=${nombre}&email=${email}`;
         });
       } else {
-        document.getElementById('status').innerHTML = 'Login with Facebook.';
+        document.getElementById('status').innerHTML = 'Connexion avec Facebook';
       }
     }
 
@@ -83,7 +85,7 @@
     <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
   </footer>
 
-  <script src="script.js"></script>
+  
 </body>
 </html>
 

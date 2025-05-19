@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+  <header>
+    <div>Messagerie Eclosion</div>
+    <div id="userInfo">Loading user...</div>
+  </header>
+
+  <main>
+    <div id="chatMessages"></div>
+
+    <div id="inputContainer">
+      <input type="text" id="messageInput" placeholder="Écris un message..." autocomplete="off" />
+      <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </main>
+
+  <script>
+    // Obtener parámetros URL
+    function getParam(key) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key);
+    }
+
+    const nombre = getParam("nombre") || "Invité(e)";
+    const email = getParam("email") || "";
+
+    // Mostrar info usuario en header
+    document.getElementById("userInfo").textContent = `Connecté(e) en tant que : ${nombre}`;
+
+    const chatMessages = document.getElementById("chatMessages");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Función para agregar un mensaje al chat
+    function addMessage(user, text) {
+      if (!text.trim()) return;
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message");
+      const userSpan = document.createElement("strong");
+      userSpan.textContent = user + ":";
+      const textSpan = document.createElement("span");
+      textSpan.textContent = " " + text;
+      msgDiv.appendChild(userSpan);
+      msgDiv.appendChild(textSpan);
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll al final
+    }
+
+    // Enviar mensaje con botón
+    sendBtn.addEventListener("click", () => {
+      const text = messageInput.value;
+      addMessage(nombre, text);
+      messageInput.value = "";
+      messageInput.focus();
+    });
+
+    // Enviar mensaje con Enter
+    messageInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendBtn.click();
+      }
+    });
+
+    // Mensaje de bienvenida al entrar
+    addMessage("Système", `Bienvenue, ${nombre} ! Tu peux discuter ici.`);
+
+  const users = [
+    { name: "Alice", message: "Salut ! Comment tu vas ?" },
+    { name: "Bob", message: "Tu viens d'où ?" },
+    { name: "Charlie", message: "Tu fais quoi dans la vie ?" },
+    { name: "David", message: "Tu as découvert Éclosion comment ?" },
+    { name: "Eve", message: "Pourquoi as-tu rejoint cette communauté ?" },
+
+    { name: "Frank", message: "Sérieusement ? Je ne savais pas !" },
+    { name: "Grace", message: "Ah bon ? C'est nouveau pour moi." },
+    { name: "Hank", message: "Vraiment ? Merci pour l'info." },
+    { name: "Ivy", message: "Tiens, je l'ignorais complètement." },
+    { name: "Jack", message: "Incroyable, je ne m'en doutais pas !" },
+
+    { name: "Kate", message: "Bienvenue à tous dans la communauté !" },
+    { name: "Leo", message: "Salut tout le monde, content d'être ici !" },
+    { name: "Mia", message: "Bienvenue sur la plateforme Éclosion !" },
+    { name: "Nina", message: "Bonjour à tous et amusez-vous bien !" },
+    { name: "Oscar", message: "Heureux de rejoindre cette aventure !" },
+  ];
+
+  function getRandomDelay() {
+    return Math.random() * 3000 + 2000; // Entre 2000 y 5000 ms
+  }
+
+  function postRandomMessage() {
+    const user = users[Math.floor(Math.random() * users.length)];
+    addMessage(user.name, user.message);
+    setTimeout(postRandomMessage, getRandomDelay());
+  }
+
+  // Comenzar el ciclo de mensajes automáticos después de 2 segundos
+  setTimeout(postRandomMessage, 2000);
+
+  </script>
+</body>
+</html>

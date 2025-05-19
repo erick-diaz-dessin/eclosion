@@ -1,0 +1,68 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-signin-client_id" content="1094789566691-cveqvjnlo4d4rdtrtjqk32vet8q63ccv.apps.googleusercontent.com" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <title>Eclosion - Réseau Social Empathique</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="room.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>Salons Actifs</h1>
+  </header>
+
+  <main>
+    <div class="gif-section">
+      <img src="images/wave-92_512.gif" alt="GIF animado">
+      <p><strong>Best match</strong></p>
+      <p>😊 4 participantes</p>
+      <button id="rejoindreBtn" class="join-button">Rejoindre</button>
+    </div>
+
+    <div class="salons-list">
+      <h2>Autres salons qui pourraient t’intéresser</h2>
+      <div class="salon">
+        <h3>Salon 1</h3>
+        <p>😊 7 participants</p>
+      </div>
+      <div class="salon">
+        <h3>Salon 2</h3>
+        <p>😊 3 participants</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Eclosion. Tous droits réservés.</p>
+    <p>« Parfois, nous n'avons pas besoin de solutions. Juste quelqu'un pour être là. »</p>
+  </footer>
+
+  <script>
+    function getParam(key) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(key);
+}
+
+const nombre = getParam("nombre");
+const email = getParam("email");
+
+// Ejemplo: mostrarlo o guardarlo en `window` para uso posterior
+window.nombre = nombre;
+window.email = email;
+
+document.getElementById("rejoindreBtn").addEventListener("click", () => {
+  window.location.href = `salon.html?nombre=${encodeURIComponent(nombre)}&email=${encodeURIComponent(email)}`;
+});
+
+  </script>
+</body>
+</html>
+
+
