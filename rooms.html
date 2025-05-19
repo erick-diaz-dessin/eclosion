@@ -1,57 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salas - Acompañarte</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Enviar mensaje a Slack</title>
 </head>
 <body>
-  <header>
-    <h1>Salón de conversación</h1>
-  </header>
-
-  <main>
-    <form id="messageForm">
-      <input type="text" id="user" placeholder="Tu nombre" required />
-      <textarea id="message" placeholder="Escribe tu mensaje..." required></textarea>
-      <button type="submit">Enviar</button>
-    </form>
-
-    <p id="status"></p>
-  </main>
-
-  <footer>
-    <p>© 2025 Eclosion. Tous droits réservés.</p>
-  </footer>
-
-  <script>
-    const form = document.getElementById('messageForm');
-    const status = document.getElementById('status');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const user = document.getElementById('user').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      if (!user || !message) {
-        status.textContent = "Debes llenar todos los campos.";
-        return;
-      }
-
-      const response = await fetch('/.netlify/functions/sendDiscordMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user, message })
-      });
-
-      if (response.ok) {
-        status.textContent = "Mensaje enviado con éxito.";
-        form.reset();
-      } else {
-        status.textContent = "Error al enviar mensaje.";
-      }
-    });
+ <div id="hola"></div>
+ <script type="text/javascript">
+  window.$crisp=[];window.CRISP_WEBSITE_ID="85c412e8-b55f-4cdf-9de5-6831030ddfa9";
+  (function(){d=document;s=d.createElement("script");
+  s.src="https://client.crisp.chat/l.js";
+  s.async=1;
+  d.getElementsByTagName("head")[0].appendChild(s);
+  })();
   </script>
 </body>
 </html>
+
+
